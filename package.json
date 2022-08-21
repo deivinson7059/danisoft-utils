@@ -1,6 +1,6 @@
 {
   "name": "danisoft-utils",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Utils Danisoft for TypeScript",
   "main": "src/index.ts",
   "typings": "dist/index.d.ts",
