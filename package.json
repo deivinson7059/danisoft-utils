@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
@@ -10,6 +10,12 @@
     "engines": {
         "node": ">=12"
     },
+    "keywords": [
+        "utils",
+        "danisoft",
+        "typeScript",
+        "ts"
+    ],
     "scripts": {
         "start": "tsdx watch",
         "build": "tsdx build",
