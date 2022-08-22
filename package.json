@@ -1,39 +1,73 @@
 {
-  "name": "danisoft-utils",
-  "version": "0.2.3",
-  "description": "Utils Danisoft for TypeScript",
-  "main": "src/index.ts",
-  "typings": "dist/index.d.ts",
-  "author": "Danisoft sas <sistmas@danisoft.com.co> (https://danisoft.com.co)",
-  "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc",
-    "pub": "npm publish --access=public"
-  },
-  "license": "MIT",
-  "keywords": [
-    "utils",
-    "danisoft",
-    "typeScript",
-    "ts"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+github.com/deivinson7059/danisoft-utils.git"
-  },
-  "bin": {
-    "danisoft-utils": "./dist/index.js"
-  },
-  "preferGlobal": true,
-  "dependencies": {
-    "ajv": "^8.11.0",
-    "ajv-formats": "^2.1.1",
-    "ajv-i18n": "^4.2.0",
-    "ajv-keywords": "^5.1.0",
-    "muhammara": "^3.0.0",
-    "typescript": "^4.7.4"
-  },
-  "devDependencies": {
-    "@types/node": "^18.7.9"
-  }
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "engines": {
+        "node": ">=12"
+    },
+    "scripts": {
+        "start": "tsdx watch",
+        "build": "tsdx build",
+        "test": "tsdx test",
+        "lint": "tsdx lint",
+        "prepare": "tsdx build",
+        "size": "size-limit",
+        "analyze": "size-limit --why",
+        "pub": "npm publish --access=public"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "tsdx lint"
+        }
+    },
+    "prettier": {
+        "printWidth": 80,
+        "semi": true,
+        "singleQuote": true,
+        "trailingComma": "es5"
+    },
+    "name": "danisoft-utils",
+    "description": "Utils Danisoft for TypeScript",
+    "author": "Danisoft sas <sistmas@danisoft.com.co> (https://danisoft.com.co)",
+    "module": "dist/danisoft-utils.esm.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/deivinson7059/danisoft-utils"
+    },
+    "size-limit": [
+        {
+            "path": "dist/danisoft-utils.cjs.production.min.js",
+            "limit": "10 KB"
+        },
+        {
+            "path": "dist/danisoft-utils.esm.js",
+            "limit": "10 KB"
+        }
+    ],
+    "devDependencies": {
+        "@size-limit/preset-small-lib": "^8.0.1",
+        "@types/qs": "^6.9.7",
+        "husky": "^8.0.1",
+        "size-limit": "^8.0.1",
+        "tsdx": "^0.14.1",
+        "tslib": "^2.4.0",
+        "typescript": "^3.9.10"
+    },
+    "dependencies": {
+        "ajv": "^8.11.0",
+        "ajv-i18n": "^4.2.0",
+        "avatar-initials-generator": "^0.0.2",
+        "axios": "^0.27.2",
+        "muhammara": "^3.0.0",
+        "qs": "^6.11.0"
+    },
+    "bin": {
+        "danisoft-utils": "dist/danisoft-utils.esm.js"
+    },
+    "preferGlobal": true
 }

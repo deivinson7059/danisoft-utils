@@ -8,4 +8,10 @@ Make sure to have either [nodejs](https://nodejs.org/en/) or [bun](https://bun.s
 
 node - v12.0 and up
 
-`npm install danisoft-utils`
+# Installation
+
+To install the stable version:
+
+```
+npm install danisoft-utils
+```
