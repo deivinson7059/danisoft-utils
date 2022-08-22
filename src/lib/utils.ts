@@ -3,6 +3,12 @@ import * as qs from 'qs';
 
 import { apiResponse } from '../types/utils';
 
+/**
+ * @description transform unarray a string
+ *
+ * @param {any[]} allowedValues - Array to transform
+ * @returns {string}
+ */
 export const traformsArray = (allowedValues: any[]): string => {
   let cont = 0;
 
@@ -25,10 +31,24 @@ export const traformsArray = (allowedValues: any[]): string => {
 
   return _allowedValues;
 };
+
+/**
+ * @description escape special characters
+ *
+ * @param {string} s - String to escape
+ * @returns {string}
+ */
 const escapeRegExp = (s: string): string => {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
-/* remplace un string */
+/**
+ * @description replace all estring
+ *
+ * @param {string} str - String to replace
+ * @param {string} match - String to find
+ * @param {string} replacement - String to replace
+ * @returns {string}
+ */
 export const replaceAll = (
   str: string,
   match: string,
@@ -37,7 +57,12 @@ export const replaceAll = (
   return str.replace(new RegExp(escapeRegExp(match), 'g'), () => replacement);
 };
 
-/* Convertir a minusculas un array */
+/**
+ * @description Convertir a minusculas un array
+ *
+ * @param {any[]} data - Array to convert
+ * @returns {any[]}
+ */
 export const lowerKeys = (data: any[]): any[] => {
   let obj: any[] = [];
   obj = data.map(function(item: any) {
@@ -53,16 +78,33 @@ export const lowerKeys = (data: any[]): any[] => {
   });
   return obj;
 };
-/* Verificar si esta vacio un array */
+/**
+ * @description Verificar si esta vacio un array
+ *
+ * @param {any[]} data - Array to check
+ * @returns {boolean}
+ */
 export const isEmptyArray = (data: any[]): boolean => {
   return data.length === 0 ? true : false;
 };
 
+/**
+ * @description retorna plataforma
+ *
+ * @param {string} platform_id? - Id de la plataforma
+ * @returns {string}
+ */
 export const getPlatform = (platform_id?: string): string => {
   let _platform_id = parseInt(platform_id || '0');
   return '0' + _platform_id;
 };
 
+/**
+ * @description string aleatorio
+ *
+ * @param {number} num? - Numero de caracteres
+ * @returns {string}
+ */
 export const getCodAleatorio = (num?: number): string => {
   if (num === undefined) {
     num = 14;
@@ -78,6 +120,13 @@ export const getCodAleatorio = (num?: number): string => {
   return result;
 };
 
+/**
+ * @description redondear una cifra
+ *
+ * @param {number} value - Valor a redondear
+ * @param {number} round - factor de redondeo
+ * @returns {number}
+ */
 export const roundDs = (value: number, round: number = 50): number => {
   let result = 0;
   let v = value / round;
@@ -91,6 +140,16 @@ export const roundDs = (value: number, round: number = 50): number => {
   return result;
 };
 
+/**
+ * @description pedir una peticion a una url
+ *
+ * @param {string} endpoint - Url de la peticion
+ * @param {string} accessToken - Token de acceso
+ * @param {string} method - Metodo de la peticion
+ * @param {any = {}} parameters - Parametros de la peticion
+ * @param {any} headers? - Cabeceras de la peticion
+ * @returns {Promise<any>}
+ */
 export const callApi = async (
   endpoint: string,
   accessToken: string,

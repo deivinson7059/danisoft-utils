@@ -1,6 +1,14 @@
 import * as Avatar from 'avatar-initials-generator';
 import { avatarConfig, avatarPalette } from '../types/avatar';
 
+/**
+ * @description Generate an avatar image
+ *
+ * @param {string} name - Name of the user
+ * @param {avatarConfig} config? - Configuration for the avatar
+ * @returns {Buffer }
+ */
+
 export const generateAvatar = (name: string, config?: avatarConfig): Buffer => {
   let _palette: string[] = getPalette(config?.palette);
 
@@ -22,6 +30,12 @@ export const generateAvatar = (name: string, config?: avatarConfig): Buffer => {
   return img;
 };
 
+/**
+ * @description Get the palette for the avatar
+ *
+ * @param {avatarPalette} palette - Palette for the avatar
+ * @returns {string[]}
+ */
 export const getPalette = (palette: avatarPalette = 'red'): string[] => {
   switch (palette) {
     case 'red':

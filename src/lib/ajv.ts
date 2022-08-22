@@ -2,6 +2,12 @@ import { ErrorObject } from 'ajv';
 import localize_es from 'ajv-i18n/localize/es';
 import { replaceAll, traformsArray } from './utils';
 
+/**
+ * @description localize ajv errors
+ *
+ * @param {ErrorObject[] | null} errors - Errors from ajv
+ * @returns {string }
+ */
 export const logMessageErrors = (errors?: ErrorObject[] | null): string => {
   localize_es(errors);
   let message: string = '';
@@ -15,21 +21,19 @@ export const logMessageErrors = (errors?: ErrorObject[] | null): string => {
       let campo = error.params.missingProperty;
       msmTemp = `El campo '${campo}' es obligatorio`;
       message = msmTemp;
-    } else if (error.keyword == 'uniqueItems') {
+    } else if (error.keyword === 'uniqueItems') {
       let campo = error.instancePath.split('/');
 
       let msmTemp = '';
       msmTemp = `El campo '${campo[campo.length - 1]}' ${error.message}`;
       message = msmTemp;
-    } else if (error.keyword == 'format') {
+    } else if (error.keyword === 'format') {
       let msmTemp = '';
       let campo = error.instancePath.split('/');
       let campoName = campo[campo.length - 1];
 
       if (parseInt(campoName) > 0) {
         campoName = `${campo[campo.length - 2]}[${campoName}]`;
-      } else {
-        campoName = campoName;
       }
 
       // console.log(campoName);
@@ -38,7 +42,7 @@ export const logMessageErrors = (errors?: ErrorObject[] | null): string => {
       msmTemp = replaceAll(msmTemp, '"', "'");
       //msmTemp = msmTemp.replace('"', "'");
       message = msmTemp;
-    } else if (error.keyword == 'enum') {
+    } else if (error.keyword === 'enum') {
       let msmTemp = '';
       let campo = error.instancePath.split('/');
 
