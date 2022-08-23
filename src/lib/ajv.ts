@@ -1,6 +1,21 @@
+import { NextFunction, Request, Response } from 'express';
+
+import Ajv from 'ajv';
+import ajvFormats from 'ajv-formats';
+import ajvKeywords from 'ajv-keywords';
+
 import { ErrorObject } from 'ajv';
 import localize_es from 'ajv-i18n/localize/es';
 import { replaceAll, traformsArray } from './utils';
+import { ResponseTraitService } from './responsetrait.service';
+import { Options, options_, ParsedQuery } from '../types/ajv';
+
+//inicializamos response trait
+const responsetrait = new ResponseTraitService();
+
+const ajv: Ajv = new Ajv({ strictTypes: false });
+ajvFormats(ajv);
+ajvKeywords(ajv);
 
 /**
  * @description localize ajv errors
@@ -63,4 +78,136 @@ export const logMessageErrors = (errors?: ErrorObject[] | null): string => {
   }
 
   return message;
+};
+
+/**
+ * @description validate body request
+ *
+ * @param {object} schema - Schema to validate
+ */
+export function validateBodyRequest(schema: object) {
+  // compile schema
+  const validate = ajv.compile(schema);
+  // middleware that returns error if schema is not ok
+  return (req: any, res: Response, next: NextFunction) => {
+    if (!validate(req.body)) {
+      let errors = validate.errors;
+
+      let msm = logMessageErrors(errors);
+
+      return res
+        .status(200)
+        .send(responsetrait.response({}, 400, msm, 'data', false));
+    }
+    return next();
+  };
+}
+
+/**
+ * @description validate params request
+ *
+ * @param {object} schema - Schema to validate
+ */
+export function validateParamsRequest(schema: object) {
+  // compile schema
+  const validate = ajv.compile(schema);
+  // middleware that returns error if schema is not ok
+  return (req: any, res: Response, next: NextFunction) => {
+    req.params = parse(req.params);
+
+    // console.log(req.params);
+    if (!validate(req.params)) {
+      let errors = validate.errors;
+
+      let msm = logMessageErrors(errors);
+
+      return res
+        .status(200)
+        .send(responsetrait.response({}, 400, msm, 'data', false));
+    }
+    return next();
+  };
+}
+
+/**
+ * @description validate query request
+ *
+ * @param {object} schema - Schema to validate
+ */
+export function validateQueryRequest(schema: object) {
+  // compile schema
+  const validate = ajv.compile(schema);
+  // middleware that returns error if schema is not ok
+  return (req: any, res: Response, next: NextFunction) => {
+    req.query = parse(req.query);
+    if (!validate(req.query)) {
+      let errors = validate.errors;
+
+      let msm = logMessageErrors(errors);
+
+      return res
+        .status(200)
+        .send(responsetrait.response({}, 400, msm, 'data', false));
+    }
+    return next();
+  };
+}
+
+/**
+ * @description parse query request
+ *
+ * @param {ParsedQuery} target - Query to parse
+ * @param {Options} options - Options to parse
+ * @returns {ParsedQuery }
+ */
+
+export const parse = (
+  target: ParsedQuery,
+  options: Options = options_
+): ParsedQuery => {
+  switch (typeof target) {
+    case 'string':
+      if (target === '') {
+        return '';
+      } else if (options.parseNull && target === 'null') {
+        return null;
+      } else if (options.parseUndefined && target === 'undefined') {
+        return undefined;
+      } else if (
+        options.parseBoolean &&
+        (target === 'true' || target === 'false')
+      ) {
+        return target === 'true';
+      } else if (options.parseNumber && !isNaN(Number(target))) {
+        return Number(target);
+      } else {
+        return target;
+      }
+    case 'object':
+      if (Array.isArray(target)) {
+        return target.map(x => parse(x, options));
+      } else {
+        const obj = target;
+        Object.keys(obj).map(key => (obj[key] = parse(target[key], options)));
+        return obj;
+      }
+    default:
+      return target;
+  }
+};
+
+/**
+ * @description parse query server
+ *
+ * @param {Options} options - Options to parse
+ */
+export const queryParser = (options: Options = options_) => (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  req.query = parse(req.query, options);
+  res.locals.query = { ...res.locals.query };
+  //console.log("query:::", req.query);
+  next();
 };

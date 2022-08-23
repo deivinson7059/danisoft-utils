@@ -58,3 +58,33 @@ export const getPalette = (palette: avatarPalette = 'red'): string[] => {
       return ['#d97706', '#4f46e5', '#9333ea'];
   }
 };
+
+/**
+ * @description to arraybuffer from Buffer
+ *
+ * @param {Buffer} buf - ArrayBuffer
+ * @returns {ArrayBuffer}
+ */
+export const toArrayBuffer = (buf: Buffer): ArrayBuffer => {
+  const ab = new ArrayBuffer(buf.length);
+  const view = new Uint8Array(ab);
+  for (let i = 0; i < buf.length; ++i) {
+    view[i] = buf[i];
+  }
+  return ab;
+};
+
+/**
+ * @description to buber from arraybuffer
+ *
+ * @param {ArrayBuffer} ab - ArrayBuffer
+ * @returns {Buffer}
+ */
+export const toBuffer = (ab: ArrayBuffer): Buffer => {
+  const buf = Buffer.alloc(ab.byteLength);
+  const view = new Uint8Array(ab);
+  for (let i = 0; i < buf.length; ++i) {
+    buf[i] = view[i];
+  }
+  return buf;
+};

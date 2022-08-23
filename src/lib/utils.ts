@@ -1,5 +1,6 @@
 import * as axios from 'axios';
 import * as qs from 'qs';
+import colors from 'colors/safe';
 
 import { apiResponse } from '../types/utils';
 
@@ -194,4 +195,229 @@ export const callApi = async (
     };
     return resp;
   }
+};
+
+/**
+ * @description generar uid
+ *
+ * @param {number} num? - Numero de caracteres
+ * @returns {string}
+ */
+
+export const generateUid = (num?: number): string => {
+  if (num === undefined) {
+    num = 21;
+  }
+
+  const date = new Date();
+  const characters = `abc${date.getMonth()}def${date.getFullYear()}nlmst${date.getTime()}urvxy`;
+
+  let result = '5fe';
+  for (let i = 0; i < num; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
+/**
+ * @description convertir a boolean
+ *
+ * @param {string} data? - Valor a convertir
+ * @returns {boolean}
+ */
+export const convertirBoolean = (data?: string): boolean => {
+  if (data === undefined) {
+    return false;
+  }
+  if (data === 'true') {
+    return true;
+  }
+  if (data === 'false') {
+    return false;
+  }
+  return false;
+};
+
+/**
+ * @description convertir cronometro a string
+ *
+ * @param {number} segundosP? - Segundos a convertir
+ * @returns {string}
+ */
+export const convCronomet = (segundosP?: number): string => {
+  if (segundosP === undefined) {
+    return '00:00';
+  }
+  //let horas:string = Math.floor(segundosP / 0xe10).toString();
+  let seg: number = Math.round(segundosP % 0x3c);
+  let min: number = Math.floor(segundosP / 0x3c) % 0x3c;
+  let segundos: string = seg > 9 ? seg.toString() : `0${seg}`;
+  let minutos: string = min > 9 ? min.toString() : `0${min}`;
+
+  return `${minutos}:${segundos}`;
+};
+
+/**
+ * @description retorna el promedio de un array
+ *
+ * @param {number[]} num - Array de numeros
+ * @returns {string}
+ */
+export const getProm = (num: number[]): string => {
+  let suma: number = 0;
+  let cont: number = 0;
+  num.forEach(element => {
+    if (element.toString() !== '0.00') {
+      //console.log(suma);
+      // console.log(cont);
+      // console.log(element);
+      suma += parseFloat(element.toString());
+      cont++;
+    }
+  });
+  if (cont === 0) {
+    return '0.00';
+  } else {
+    return (suma / cont).toFixed(2);
+  }
+};
+
+/**
+ * @description optener codigo opt
+ *
+ * @returns {string}
+ */
+export const obtenerClave = (): string => {
+  let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  let clave = '';
+  for (let i = 0; i < 6; i++)
+    clave += numbers[Math.floor(Math.random() * numbers.length)];
+  return clave;
+};
+/**
+ * @description obtener pass random
+ * @param {number} num - Array de numeros
+ * @returns {string}
+ */
+
+export const obtenerPassTemp = (num: number = 8): string => {
+  const characters = `a$bc4567efABC*DEFGg@hijklNOP-QRSmnopqrstuvw+xyz012389HIJKL#MTUVWXYZ`;
+
+  let result = '';
+  for (let i = 0; i < num; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
+/**
+ * @description obtener string random
+ * @returns {string}
+ */
+export const randonAuth = (): string => {
+  let num = 32;
+
+  const date = new Date();
+  const characters = `abcdefghi${date.getTime()}jklmnopqrstuvwxyz0123456789`;
+
+  let result = '';
+  for (let i = 0; i < num; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
+/**
+ * @description limpiar un string *
+ * @param {string} s - string a limpiar
+ * @returns {string}
+ */
+export const limpiar = (s: string): string => {
+  let r = s.toLowerCase();
+  r = r.replace(new RegExp(/\s/g), ' ');
+  r = r.replace(new RegExp(/[àáâãäå]/g), 'a');
+  r = r.replace(new RegExp(/[èéêë]/g), 'e');
+  r = r.replace(new RegExp(/[ìíîï]/g), 'i');
+  r = r.replace(new RegExp(/ñ/g), 'n');
+  r = r.replace(new RegExp(/[òóôõö]/g), 'o');
+  r = r.replace(new RegExp(/[ùúûü]/g), 'u');
+  return r;
+};
+
+/**
+ * @description get distance between two points
+ *
+ * @param {number} lat1 - Latitud 1
+ * @param {number} lon1 - Longitud 1
+ * @param {number} lat2 - Latitud 2
+ * @param {number} lon2 - Longitud 2
+ * @returns {string}
+ */
+export const getKilometros = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): string => {
+  let rad = (x: number): number => (x * Math.PI) / 180;
+  let R = 6378.137; //Radio de la tierra en km
+  let dLat = rad(lat2 - lat1);
+  let dLong = rad(lon2 - lon1);
+  let a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(lat1)) *
+      Math.cos(rad(lat2)) *
+      Math.sin(dLong / 2) *
+      Math.sin(dLong / 2);
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  let d = R * c;
+  return d.toFixed(2); //Retorna tres decimales
+};
+
+/**
+ * @description  get access permission route
+ * @param {string} role - Role
+ * @returns {string}
+ */
+export const getAccessTypes = (role: string): string[] => {
+  let resul: string[] = [];
+  if (role === 'ADMIN_ROLE') {
+    resul = ['admin'];
+  } else if (role === 'VENTA_ROLE') {
+    resul = ['sale'];
+  } else if (role === 'CONTADOR_ROLE') {
+    resul = ['account'];
+  } else if (role === 'DEVELOP_ROLE') {
+    resul = ['dev', 'admin', 'account', 'sale'];
+  }
+
+  return resul;
+};
+
+export const greenBright = (start: string, text: string): void => {
+  console.log(`${start} ${colors.green(text)}`);
+};
+
+export const redBright = (start: string, text: string): void => {
+  console.log(`${start} ${colors.red(text)}`);
+};
+
+export const yellowBright = (start: string, text: string): void => {
+  console.log(`${start} ${colors.yellow(text)}`);
+};
+
+export const blueBright = (start: string, text: string): void => {
+  console.log(`${start} ${colors.blue(text)}`);
+};
+
+export const magentaBright = (start: string, text: string): void => {
+  console.log(`${start} ${colors.magenta(text)}`);
+};
+
+export const cyanBright = (start: string, text: string): void => {
+  console.log(`${start} ${colors.cyan(text)}`);
+};
+
+export const whiteBright = (start: string, text: string): void => {
+  console.log(`${start} ${colors.white(text)}`);
 };
