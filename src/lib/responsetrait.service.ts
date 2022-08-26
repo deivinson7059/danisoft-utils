@@ -32,9 +32,9 @@ export class ResponseTraitService {
         return {
           code: status,
           success: true,
-          total: data.length === 0 ? 1 : data.length,
+          total: data.length === 0 ? 1 : data.length || 0 || 0,
           messages: {
-            success: message,
+            success: message ? message : 'Success',
           },
           [propiedad]: data,
         };
@@ -42,28 +42,28 @@ export class ResponseTraitService {
         return {
           code: status,
           success: true,
-          total: data.length === 0 ? 1 : data.length,
+          total: data.length === 0 ? 1 : data.length || 0,
           messages: {
-            success: message,
+            success: message ? message : 'Success',
           },
           [propiedad]: data,
-          error: error,
+          error: error ? error : null,
         };
       } else if (isData === false && showError === true) {
         return {
           code: status,
           success: true,
           messages: {
-            success: message,
+            success: message ? message : 'Success',
           },
-          error: error,
+          error: error ? error : null,
         };
       } else {
         return {
           code: status,
           success: true,
           messages: {
-            success: message,
+            success: message ? message : 'Success',
           },
         };
       }
@@ -73,7 +73,7 @@ export class ResponseTraitService {
           code: status,
           success: false,
           messages: {
-            error: message,
+            error: message ? message : 'Error',
           },
           [propiedad]: [],
         };
@@ -82,16 +82,16 @@ export class ResponseTraitService {
           code: status,
           success: false,
           messages: {
-            error: message,
+            error: message ? message : 'Error',
           },
-          error: error,
+          error: error ? error : null,
         };
       } else {
         return {
           code: status,
           success: false,
           messages: {
-            error: message,
+            error: message ? message : 'Error',
           },
         };
       }

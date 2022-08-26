@@ -13,5 +13,5 @@ node - v12.0 and up
 To install the stable version:
 
 ```
-npm install danisoft-utils
+npm install danisoft-utils@latest
 ```

@@ -4,6 +4,7 @@
 export { PDFRecryptOptions } from './types/pdfence';
 export { avatarConfig, avatarParams, avatarPalette } from './types/avatar';
 export {
+  IpInfo,
   Middleware,
   Authorize,
   ReqController,
@@ -57,10 +58,14 @@ export {
   parse,
   queryParser,
 } from './lib/ajv';
+
+export { getIpInfoMiddleware, getIpInfo } from './lib/express';
 export {
+  base64MimeType,
   callApi,
   convCronomet,
   convertirBoolean,
+  detectMimeType,
   getAccessTypes,
   getCodAleatorio,
   getKilometros,
@@ -68,6 +73,7 @@ export {
   getPlatform,
   getProm,
   isEmptyArray,
+  ImgCode,
   limpiar,
   lowerKeys,
   obtenerClave,
@@ -75,6 +81,7 @@ export {
   randonAuth,
   replaceAll,
   roundDs,
+  saveExternalFile,
   traformsArray,
 } from './lib/utils';
 export {

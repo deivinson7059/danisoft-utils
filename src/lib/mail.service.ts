@@ -5,7 +5,7 @@ import {
   MailServiceResponse,
   SMTPTransportOptions,
 } from '../types/mail';
-import { greenBright, redBright } from './utils';
+import { greenBright, redBright } from './console';
 
 /**
  * @description Send an email

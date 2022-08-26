@@ -1,4 +1,28 @@
 import { NextFunction, Request, Response } from 'express';
+import geoip from 'geoip-lite';
+
+declare global {
+  namespace Express {
+    interface Request {
+      ipInfo?: IpInfo | undefined;
+    }
+  }
+}
+
+export interface IpInfo {
+  ip: string;
+  range?: [number, number];
+  country?: string;
+  region?: string;
+  eu?: '1' | '0';
+  timezone?: string;
+  city?: string;
+  ll?: [number, number];
+  metro?: number;
+  area?: number;
+  error?: string;
+}
+
 export declare type Middleware = (
   req: Request,
   res: Response,
@@ -12,6 +36,8 @@ export declare type Authorize = (
   res: Response,
   next: NextFunction
 ) => Promise<Response<any, Record<string, any>> | undefined>;
+
+export declare type IpInfo_ = (ip: string) => geoip.Lookup | { error: string };
 
 //ReqController
 export declare type ReqController<B> = Request<{}, {}, B>;

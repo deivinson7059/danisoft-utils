@@ -1,6 +1,9 @@
 import * as axios from 'axios';
 import * as qs from 'qs';
-import colors from 'colors/safe';
+
+import * as fs from 'fs';
+import https from 'https';
+import http from 'http';
 
 import { apiResponse } from '../types/utils';
 
@@ -393,31 +396,70 @@ export const getAccessTypes = (role: string): string[] => {
 
   return resul;
 };
+export async function base64MimeType(encoded: string): Promise<string | null> {
+  var result = null;
 
-export const greenBright = (start: string, text: string): void => {
-  console.log(`${start} ${colors.green(text)}`);
-};
+  if (typeof encoded !== 'string') {
+    return result;
+  }
 
-export const redBright = (start: string, text: string): void => {
-  console.log(`${start} ${colors.red(text)}`);
-};
+  var mime = encoded.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
 
-export const yellowBright = (start: string, text: string): void => {
-  console.log(`${start} ${colors.yellow(text)}`);
-};
+  if (mime && mime.length) {
+    result = mime[1];
+  }
 
-export const blueBright = (start: string, text: string): void => {
-  console.log(`${start} ${colors.blue(text)}`);
-};
+  return result;
+}
 
-export const magentaBright = (start: string, text: string): void => {
-  console.log(`${start} ${colors.magenta(text)}`);
-};
+export function ImgCode(num: number) {
+  if (num === undefined) {
+    num = 14;
+  }
 
-export const cyanBright = (start: string, text: string): void => {
-  console.log(`${start} ${colors.cyan(text)}`);
-};
+  const date = new Date();
+  const characters = `ABCDEFGHI${date.getFullYear()}JKLMNOPQRSTUVWXYZ${date.getMonth()}abcdefghi${date.getTime()}jklmnopqrstuvwxyz0123456789`;
 
-export const whiteBright = (start: string, text: string): void => {
-  console.log(`${start} ${colors.white(text)}`);
-};
+  let result = '';
+  for (let i = 0; i < num; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
+export async function detectMimeType(b64: string): Promise<string> {
+  let mime = await base64MimeType(b64);
+  if (mime === null) {
+    return 'none';
+  } else {
+    let df = `data:${mime};base64,`;
+
+    let encoded = b64.replace(df, '');
+    return encoded;
+  }
+}
+
+export async function saveExternalFile(
+  url: string,
+  path_: string = 'storage/mediaSend'
+): Promise<any> {
+  return new Promise(resolve => {
+    const ext = url.split('.').pop();
+    const checkProtocol = url.split('/').includes('https:');
+    const handleHttp = checkProtocol ? https : http;
+    const name = `${ImgCode(50)}.${ext}`;
+    const file = fs.createWriteStream(`${path_}/${name}`);
+    handleHttp.get(url, function(response: any) {
+      response.pipe(file);
+      file.on('finish', function() {
+        file.close();
+        resolve(name);
+      });
+      file.on('error', function() {
+        console.log('errro');
+        file.close();
+        resolve(null);
+      });
+    });
+  });
+}
