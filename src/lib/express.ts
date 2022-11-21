@@ -1,5 +1,6 @@
 import geoip from 'geoip-lite';
-import { IpInfo_, Middleware } from '../types/express';
+import { IpInfo_, Middleware, _noHeaderInfo } from '../types/express';
+import { parse_inyection } from './ajv';
 
 export const getIpInfoMiddleware: Middleware = async (req, _, next) => {
   let _xForwardedFor = req.headers['x-forwarded-for'] || '';
@@ -35,4 +36,21 @@ export const getIpInfo: IpInfo_ = ip => {
     };
   }
   return lookedUpIP;
+};
+
+/* 
+    limpier inyecion sql
+ */
+export const cleanSqlInjection: Middleware = async (req, _, next) => {
+  req.body = parse_inyection(req.body);
+  return next();
+};
+/* 
+    no header info
+ */
+export const noHeaderInfo: _noHeaderInfo = (
+  autor: string = 'Danisoft sas'
+) => async (_: any, res: any, next: any) => {
+  res.setHeader('X-Powered-By', autor);
+  return next();
 };

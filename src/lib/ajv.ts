@@ -16,6 +16,7 @@ const responsetrait = new ResponseTraitService();
 const ajv: Ajv = new Ajv({ strictTypes: false });
 ajvFormats(ajv);
 ajvKeywords(ajv);
+require('ajv-base64')(ajv);
 
 /**
  * @description localize ajv errors
@@ -210,4 +211,80 @@ export const queryParser = (options: Options = options_) => (
   res.locals.query = { ...res.locals.query };
   //console.log("query:::", req.query);
   next();
+};
+
+/**
+ * @description escape string to sql
+ *
+ * @param {str} string - String to escape
+ */
+export function escape_inyection(str: string): string {
+  return str.replace(/[\0\\x08\\x09\\x1a\n\r"'\\\\%]/g, (char: string) => {
+    switch (char) {
+      case '\0':
+        return '\\0';
+      case '\x08':
+        return '\\b';
+      case '\x09':
+        return '\\t';
+      case '\x1a':
+        return '\\z';
+      case '\n':
+        return '\\n';
+      case '\r':
+        return '\\r';
+      case '"':
+      case "'":
+      case '\\':
+      case '%':
+        return '\\' + char;
+      default:
+        return char;
+    }
+  });
+}
+
+/**
+ * @description escape string to sql
+ *
+ * @param {ParsedQuery} target - Query to parse
+ * @param {Options} options - Options to parse
+ * @returns {ParsedQuery }
+ */
+
+export const parse_inyection = (
+  target: ParsedQuery,
+  options: Options = options_
+): ParsedQuery => {
+  switch (typeof target) {
+    case 'string':
+      if (target === '') {
+        return '';
+      } else if (options.parseNull && target === 'null') {
+        return null;
+      } else if (options.parseUndefined && target === 'undefined') {
+        return undefined;
+      } else if (
+        options.parseBoolean &&
+        (target === 'true' || target === 'false')
+      ) {
+        return target === 'true';
+      } else if (options.parseNumber && !isNaN(Number(target))) {
+        return Number(target);
+      } else {
+        return escape_inyection(target);
+      }
+    case 'object':
+      if (Array.isArray(target)) {
+        return target.map(x => parse_inyection(x, options));
+      } else {
+        const obj = target;
+        Object.keys(obj).map(
+          key => (obj[key] = parse_inyection(target[key], options))
+        );
+        return obj;
+      }
+    default:
+      return target;
+  }
 };

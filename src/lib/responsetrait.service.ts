@@ -32,7 +32,7 @@ export class ResponseTraitService {
         return {
           code: status,
           success: true,
-          total: data.length === 0 ? 1 : data.length || 0 || 0,
+          total: Array.isArray(data) === true ? data.length : 1,
           messages: {
             success: message ? message : 'Success',
           },
@@ -42,7 +42,7 @@ export class ResponseTraitService {
         return {
           code: status,
           success: true,
-          total: data.length === 0 ? 1 : data.length || 0,
+          total: Array.isArray(data) === true ? data.length : 1,
           messages: {
             success: message ? message : 'Success',
           },

@@ -37,10 +37,19 @@ export declare type Authorize = (
   next: NextFunction
 ) => Promise<Response<any, Record<string, any>> | undefined>;
 
+export declare type _noHeaderInfo = (
+  autor: string
+) => (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => Promise<Response<any, Record<string, any>> | undefined>;
+
 export declare type IpInfo_ = (ip: string) => geoip.Lookup | { error: string };
 
 //ReqController
 export declare type ReqController<B> = Request<{}, {}, B>;
-export declare type ReqControllerParamsQuery<P, Q> = Request<P, {}, {}, Q>;
-export declare type ReqControllerQuery<Q> = Request<{}, {}, {}, Q>;
 export declare type ReqControllerParamsBody<P, B> = Request<P, {}, B>;
+export declare type ReqControllerParamsQuery<P, Q> = Request<P, {}, {}, Q>;
+export declare type ReqControllerParams<P> = Request<P, {}, {}, {}>;
+export declare type ReqControllerQuery<Q> = Request<{}, {}, {}, Q>;

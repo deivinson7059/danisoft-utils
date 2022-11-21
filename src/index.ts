@@ -9,8 +9,9 @@ export {
   Authorize,
   ReqController,
   ReqControllerParamsQuery,
-  ReqControllerQuery,
   ReqControllerParamsBody,
+  ReqControllerParams,
+  ReqControllerQuery,
 } from './types/express';
 export { apiResponse, modelsResponse } from './types/utils';
 export {
@@ -57,9 +58,16 @@ export {
   validateQueryRequest,
   parse,
   queryParser,
+  escape_inyection,
+  parse_inyection,
 } from './lib/ajv';
 
-export { getIpInfoMiddleware, getIpInfo } from './lib/express';
+export {
+  getIpInfoMiddleware,
+  getIpInfo,
+  cleanSqlInjection,
+  noHeaderInfo,
+} from './lib/express';
 export {
   base64MimeType,
   callApi,
