@@ -11,7 +11,7 @@ import * as muhammara from 'muhammara';
 export const fromBufferToBuffer = (
   buffer: Buffer,
   passwordOptions: PDFRecryptOptions
-): Promise<any> | string => {
+): Buffer | string => {
   try {
     const readStream = new muhammara.PDFRStreamForBuffer(buffer);
     const writeStream = new muhammara.PDFWStreamForBuffer();
@@ -37,7 +37,7 @@ export const fromFileToBuffer = (
     const readStream = new muhammara.PDFRStreamForFile(inputFilePath);
     const writeStream = new muhammara.PDFWStreamForBuffer();
     muhammara.recrypt(readStream, writeStream, passwordOptions);
-    return writeStream.buffer;
+    return Promise.resolve(writeStream.buffer);
   } catch (error) {
     console.error(error);
     return 'error';

@@ -7,6 +7,7 @@ export {
   IpInfo,
   Middleware,
   Authorize,
+  AuthorizeAuth0,
   ReqController,
   ReqControllerParamsQuery,
   ReqControllerParamsBody,

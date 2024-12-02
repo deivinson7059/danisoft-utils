@@ -37,6 +37,13 @@ export declare type Authorize = (
   next: NextFunction
 ) => Promise<Response<any, Record<string, any>> | undefined>;
 
+export declare type AuthorizeAuth0 = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => Promise<void | Response<any, Record<string, any>>>;
+
 export declare type _noHeaderInfo = (
   autor: string
 ) => (

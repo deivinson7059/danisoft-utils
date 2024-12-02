@@ -14,9 +14,14 @@ import { Options, options_, ParsedQuery } from '../types/ajv';
 const responsetrait = new ResponseTraitService();
 
 const ajv: Ajv = new Ajv({ strictTypes: false });
-ajvFormats(ajv);
+
+ajvFormats(ajv).addFormat(
+  'base64',
+  new RegExp(
+    '^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$'
+  )
+);
 ajvKeywords(ajv);
-require('ajv-base64')(ajv);
 
 /**
  * @description localize ajv errors
