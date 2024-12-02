@@ -8,7 +8,7 @@
     "src"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=18"
   },
   "keywords": [
     "utils",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "cccc",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
